@@ -246,7 +246,7 @@ require('lazy').setup({
 
   -- "gc" to comment visual regions/lines
   { 'numToStr/Comment.nvim', opts = {} },
-  { 'github/copilot.vim' },
+  -- { 'github/copilot.vim' },
 
   -- Here is a more advanced example where we pass configuration
   -- options to `gitsigns.nvim`. This is equivalent to the following Lua:
@@ -391,6 +391,9 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
       vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
 
+      vim.keymap.set('n', '<leader>sF', function()
+        builtin.find_files { hidden = true }
+      end, { desc = '[S]earch hidden [F]iles' })
       -- Slightly advanced example of overriding default behavior and theme
       vim.keymap.set('n', '<leader>/', function()
         -- You can pass additional configuration to Telescope to change the theme, layout, etc.
@@ -589,6 +592,7 @@ require('lazy').setup({
             },
           },
         },
+        ruff_lsp = {},
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
@@ -613,9 +617,11 @@ require('lazy').setup({
               hybridMode = false,
             },
           },
+          settings = {
+            format_on_save = false,
+          },
         },
         --
-        ruff_lsp = {},
         lua_ls = {
           -- cmd = {...},
           -- filetypes = { ...},
@@ -682,9 +688,9 @@ require('lazy').setup({
         -- Disable "format_on_save lsp_fallback" for languages that don't
         -- have a well standardized coding style. You can add additional
         -- languages here or re-enable it for the disabled ones.
-        local disable_filetypes = { c = true, cpp = true }
+        local disable_filetypes = { c = true, cpp = true, vue = true, ts = true, typescript = true }
         return {
-          timeout_ms = 500,
+          timeout_ms = 1000,
           lsp_fallback = not disable_filetypes[vim.bo[bufnr].filetype],
         }
       end,
@@ -735,6 +741,7 @@ require('lazy').setup({
       --  into multiple repos for maintenance purposes.
       'hrsh7th/cmp-nvim-lsp',
       'hrsh7th/cmp-path',
+      'hrsh7th/cmp-nvim-lsp-signature-help',
     },
     config = function()
       -- See `:help cmp`
@@ -806,6 +813,7 @@ require('lazy').setup({
           { name = 'nvim_lsp' },
           { name = 'luasnip' },
           { name = 'path' },
+          { name = 'nvim_lsp_signature_help' },
         },
       }
     end,
@@ -946,6 +954,7 @@ require('lazy').setup({
     },
   },
 })
+require('luasnip.loaders.from_lua').load { paths = '~/snippets' }
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et

@@ -83,6 +83,11 @@ I hope you enjoy your Neovim journey,
 
 P.S. You can delete this when you're done too. It's your config now! :)
 --]]
+--
+-- Set cursor to block always
+-- See `:help 'guicursor'`
+-- This is a global option, so it must be set before any windows are opened
+vim.opt.guicursor = 'n-v-c:block-Cursor/lCursor,i:block-Cursor/lCursor-blinkon175'
 
 -- Set <space> as the leader key
 -- See `:help mapleader`
@@ -246,7 +251,7 @@ require('lazy').setup({
 
   -- "gc" to comment visual regions/lines
   { 'numToStr/Comment.nvim', opts = {} },
-  -- { 'github/copilot.vim' },
+  { 'github/copilot.vim' },
 
   -- Here is a more advanced example where we pass configuration
   -- options to `gitsigns.nvim`. This is equivalent to the following Lua:
@@ -834,6 +839,7 @@ require('lazy').setup({
 
       -- You can configure highlights by doing something like:
       vim.cmd.hi 'Comment gui=none'
+      vim.cmd 'hi Normal guibg=none'
     end,
   },
 

@@ -286,6 +286,7 @@ require('lazy').setup({
   -- after the plugin has been loaded:
   --  config = function() ... end
   { 'nvim-tree/nvim-web-devicons' },
+  { 'echasnovski/mini.nvim', version = false },
   { -- Useful plugin to show you pending keybinds.
     'folke/which-key.nvim',
     event = 'VimEnter', -- Sets the loading event to 'VimEnter'

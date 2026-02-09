@@ -719,21 +719,22 @@ require('lazy').setup({
       local servers = {
         -- clangd = {},
         -- gopls = {},
-        pyright = {
-          settings = {
-            pyright = {
-              disableorganizeImports = true, -- Using Ruff
-            },
-          },
-          python = {
-            analysis = {
-              -- Ignore all files for analysis to exclusively use Ruff for linting
-              ignore = { '*' },
-            },
-          },
-        },
+        -- pyright = {
+        --   settings = {
+        --     pyright = {
+        --       disableorganizeImports = true, -- Using Ruff
+        --     },
+        --   },
+        --   python = {
+        --     analysis = {
+        --       -- Ignore all files for analysis to exclusively use Ruff for linting
+        --       ignore = { '*' },
+        --     },
+        --   },
+        -- },
         tailwindcss = {},
         ruff = {},
+        ty = {},
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --

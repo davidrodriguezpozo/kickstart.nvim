@@ -598,21 +598,7 @@ require('lazy').setup({
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
-        -- Some languages (like typescript) have entire language plugins that can be useful:
-        --    https://github.com/pmizio/typescript-tools.nvim
-        --
-        -- But for many setups, the LSP (`ts_ls`) will work just fine
-        ts_ls = {
-          init_options = {
-            plugins = {
-              {
-                name = '@vue/typescript-plugin',
-                location = '/usr/local/lib/node_modules/@vue/language-server',
-                languages = { 'vue' },
-              },
-            },
-          },
-        },
+        -- TypeScript/Vue: configured via after/lsp/vtsls.lua and after/lsp/vue_ls.lua
         --
         lua_ls = {
           -- cmd = { ... },
@@ -646,6 +632,8 @@ require('lazy').setup({
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
+        'vtsls',
+        'vue-language-server',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -663,6 +651,9 @@ require('lazy').setup({
           end,
         },
       }
+
+      -- Enable LSP servers configured via after/lsp/*.lua (Neovim 0.11+)
+      vim.lsp.enable { 'vtsls', 'vue_ls' }
     end,
   },
 

@@ -5,7 +5,17 @@ return {
   ---@type snacks.Config
   opts = {
     -- UI modules
-    picker = { enabled = true },
+    picker = {
+      enabled = true,
+      win = {
+        input = {
+          keys = {
+            ['<c-d>'] = { 'preview_scroll_down', mode = { 'i', 'n' } },
+            ['<c-u>'] = { 'preview_scroll_up', mode = { 'i', 'n' } },
+          },
+        },
+      },
+    },
     explorer = { enabled = true },
     notifier = { enabled = true },
     input = { enabled = true },

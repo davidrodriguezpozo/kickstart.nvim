@@ -28,6 +28,7 @@ return {
     bigfile = { enabled = true },
     terminal = { enabled = true },
     git = { enabled = true },
+    zen = { enabled = true },
     indent = {
       enabled = true,
       exclude = { 'python' },
@@ -59,5 +60,12 @@ return {
 
     -- Git
     { '<leader>go', function() Snacks.gitbrowse() end, desc = '[G]it Browse ([O]pen)' },
+
+    -- Zen mode
+    { '<leader>tz', function() Snacks.zen() end, desc = '[T]oggle [Z]en Mode' },
+
+    -- Word references (jump between LSP references of word under cursor)
+    { ']w', function() Snacks.words.jump(vim.v.count1) end, desc = 'Next word reference' },
+    { '[w', function() Snacks.words.jump(-vim.v.count1) end, desc = 'Prev word reference' },
   },
 }

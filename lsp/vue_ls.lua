@@ -1,5 +1,3 @@
----@module "vim.lsp.client"
----@class vim.lsp.ClientConfig
 return {
   on_init = function(client)
     client.handlers['tsserver/request'] = function(_, result, context)
@@ -13,7 +11,7 @@ return {
       local param = unpack(result)
       local id, command, payload = unpack(param)
       ts_client:exec_cmd({
-        title = 'vue_request_forward', -- You can give title anything as it's used to represent a command in the UI, `:h Client:exec_cmd`
+        title = 'vue_request_forward',
         command = 'typescript.tsserverRequest',
         arguments = {
           command,

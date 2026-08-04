@@ -1,16 +1,20 @@
 return {
   filetypes = { 'javascript', 'typescript', 'vue' },
+  -- Pass --max-old-space-size directly to Node to prevent SIGABRT on large repos
+  cmd_env = { NODE_OPTIONS = '--max-old-space-size=8192' },
+  handlers = {
+    -- Suppress the "TypeScript crashed N times, send report" dialog
+    ['window/showMessageRequest'] = function(err, result, ctx, config)
+      if result and result.message and result.message:lower():find 'crash' then
+        return vim.NIL
+      end
+      return vim.lsp.handlers['window/showMessageRequest'](err, result, ctx, config)
+    end,
+  },
   settings = {
     vtsls = {
       tsserver = {
-        globalPlugins = {
-          {
-            name = '@vue/typescript-plugin',
-            location = vim.fn.stdpath 'data' .. '/mason/packages/vue-language-server/node_modules/@vue/language-server',
-            languages = { 'vue' },
-            configNamespace = 'typescript',
-          },
-        },
+        maxTsServerMemory = 8192,
       },
     },
   },

@@ -233,6 +233,18 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
+vim.api.nvim_create_autocmd('FileType', {
+  desc = 'Use 2-space indentation for JS/TS files',
+  group = vim.api.nvim_create_augroup('js-ts-indent', { clear = true }),
+  pattern = { 'javascript', 'javascriptreact', 'typescript', 'typescriptreact' },
+  callback = function()
+    vim.bo.shiftwidth = 2
+    vim.bo.tabstop = 2
+    vim.bo.softtabstop = 2
+    vim.bo.expandtab = true
+  end,
+})
+
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
@@ -261,7 +273,19 @@ rtp:prepend(lazypath)
 -- NOTE: Here is where you install your plugins.
 require('lazy').setup({
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
-  'NMAC427/guess-indent.nvim', -- Detect tabstop and shiftwidth automatically
+  {
+    'NMAC427/guess-indent.nvim', -- Detect tabstop and shiftwidth automatically
+    opts = {
+      filetype_exclude = {
+        'netrw',
+        'tutor',
+        'javascript',
+        'javascriptreact',
+        'typescript',
+        'typescriptreact',
+      },
+    },
+  },
 
   -- NOTE: Plugins can also be added by using a table,
   -- with the first argument being the link and the following
@@ -272,8 +296,7 @@ require('lazy').setup({
   --  This is equivalent to:
   --    require('Comment').setup({})
 
-  -- "gc" to comment visual regions/lines
-  { 'numToStr/Comment.nvim', opts = {} },
+  -- "gc" to comment visual regions/lines (built-in since Neovim 0.10)
 
   -- Alternatively, use `config = function() ... end` for full control over the configuration.
   -- If you prefer to call `setup` explicitly, use:
@@ -428,7 +451,7 @@ require('lazy').setup({
           'stylua',
           'ruff',
           'tailwindcss-language-server',
-          'vtsls',
+          { 'vtsls', version = '0.2.9' },
           'vue-language-server',
           'ty',
         },
@@ -475,7 +498,7 @@ require('lazy').setup({
         javascript = { 'prettier' },
         javascriptreact = { 'prettier' },
         typescript = { 'prettier' },
-        typescriptreact = { 'prettier' },
+        typescriptreact = { 'biome' },
         css = { 'prettier' },
         scss = { 'prettier' },
         html = { 'prettier' },
@@ -621,7 +644,12 @@ require('lazy').setup({
   },
 
   -- Highlight todo, notes, etc in comments
-  { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
+  {
+    'folke/todo-comments.nvim',
+    event = 'VimEnter',
+    dependencies = { 'nvim-lua/plenary.nvim' },
+    opts = { signs = false },
+  },
 
   { -- Collection of various small independent plugins/modules
     'echasnovski/mini.nvim',
@@ -666,12 +694,29 @@ require('lazy').setup({
     dependencies = {
       'nvim-treesitter/nvim-treesitter-textobjects',
     },
-    main = 'nvim-treesitter.configs',
+    main = 'nvim-treesitter.config',
     opts = {
       ensure_installed = {
-        'bash', 'c', 'css', 'diff', 'html', 'javascript', 'json', 'lua',
-        'luadoc', 'markdown', 'markdown_inline', 'python', 'query', 'toml',
-        'tsx', 'typescript', 'vim', 'vimdoc', 'vue', 'yaml',
+        'bash',
+        'c',
+        'css',
+        'diff',
+        'html',
+        'javascript',
+        'json',
+        'lua',
+        'luadoc',
+        'markdown',
+        'markdown_inline',
+        'python',
+        'query',
+        'toml',
+        'tsx',
+        'typescript',
+        'vim',
+        'vimdoc',
+        'vue',
+        'yaml',
       },
       auto_install = true,
       highlight = {
@@ -790,13 +835,25 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
     map('grn', vim.lsp.buf.rename, '[R]e[n]ame')
     map('gra', vim.lsp.buf.code_action, '[G]oto Code [A]ction', { 'n', 'x' })
-    map('grr', function() Snacks.picker.lsp_references() end, '[G]oto [R]eferences')
-    map('gri', function() Snacks.picker.lsp_implementations() end, '[G]oto [I]mplementation')
-    map('grd', function() Snacks.picker.lsp_definitions() end, '[G]oto [D]efinition')
+    map('grr', function()
+      Snacks.picker.lsp_references()
+    end, '[G]oto [R]eferences')
+    map('gri', function()
+      Snacks.picker.lsp_implementations()
+    end, '[G]oto [I]mplementation')
+    map('grd', function()
+      Snacks.picker.lsp_definitions()
+    end, '[G]oto [D]efinition')
     map('grD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
-    map('gO', function() Snacks.picker.lsp_symbols() end, 'Open Document Symbols')
-    map('gW', function() Snacks.picker.lsp_workspace_symbols() end, 'Open Workspace Symbols')
-    map('grt', function() Snacks.picker.lsp_type_definitions() end, '[G]oto [T]ype Definition')
+    map('gO', function()
+      Snacks.picker.lsp_symbols()
+    end, 'Open Document Symbols')
+    map('gW', function()
+      Snacks.picker.lsp_workspace_symbols()
+    end, 'Open Workspace Symbols')
+    map('grt', function()
+      Snacks.picker.lsp_type_definitions()
+    end, '[G]oto [T]ype Definition')
 
     local client = vim.lsp.get_client_by_id(event.data.client_id)
     if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint, event.buf) then
